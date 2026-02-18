@@ -1,0 +1,67 @@
+name: Python CI with uv
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}  # This will run on the OS specified in the matrix
+
+    strategy:
+      matrix:
+        #os: [ubuntu-latest, macos-latest, windows-latest]  # Testing on Linux, macOS, and Windows
+        os: [windows-latest]  # Testing on Windows
+        python-version: [3.13]  # Test on multiple Python versions
+
+    environment:
+      name: framework
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install uv package manager (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+
+    - name: Install uv package manager (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+
+    - name: Install uv package manager (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+    - name: Ensure uv is on PATH (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        $uvBin = Join-Path $env:USERPROFILE ".local\\bin"
+        if (Test-Path $uvBin) { Add-Content $env:GITHUB_PATH $uvBin }
+        $cargoBin = Join-Path $env:USERPROFILE ".cargo\\bin"
+        if (Test-Path $cargoBin) { Add-Content $env:GITHUB_PATH $cargoBin }
+
+    - name: Install dependencies with uv
+      run: |
+        uv sync
+        uv pip install -e .
+
+    - name: Run tests
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      run: |
+        uv run test/evals.py
+
