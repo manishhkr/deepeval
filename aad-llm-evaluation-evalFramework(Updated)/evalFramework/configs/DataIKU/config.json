@@ -1,0 +1,8 @@
+{
+  "provider": "http",
+  "endpoint": "https://dataiku.api/run",
+  "output_type": "json",
+  "answer_field": "message",
+  "validate_schema": "schemas/dataiku_action.schema.json",
+  "threshold": 0.8
+}

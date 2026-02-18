@@ -1,0 +1,5 @@
+{"item": {"ticket_text": "I am down with fever and need 2 days leave.", "correct_label": "Sick Leave"}}
+{"item": {"ticket_text": "I have a family function tomorrow.", "correct_label": "Casual Leave"}}
+{"item": {"ticket_text": "Need to visit the bank for urgent work.", "correct_label": "Casual Leave"}}
+{"item": {"ticket_text": "I am vomiting since morning, need leave.", "correct_label": "Sick Leave"}}
+{"item": {"ticket_text": "Personal wor, need a day off.", "correct_label": "Other"}}

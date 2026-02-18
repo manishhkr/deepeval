@@ -1,0 +1,8 @@
+{
+  "provider": "http",
+  "endpoint": "https://rag.api/generate",
+  "output_type": "json",
+  "answer_field": "final_answer",
+  "score_field": "final_answer",
+  "threshold": 0.8
+}
